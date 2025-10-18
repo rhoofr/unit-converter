@@ -2,6 +2,7 @@
 
 **Last Updated:** October 18, 2025  
 **Maintainer:** @rhoofr
+**Version:** 0.2.0
 
 ## Core Technologies
 
@@ -21,6 +22,7 @@
 4. **Performance**: Utilize React Server Components (RSC) where possible, client components only when needed
 5. **Consistency**: Use shadcn/ui components and semantic color classes for uniform design
 6. **Clean Architecture**: Separate concerns with clear directory structure and path aliases
+7. **Design**: Maintain visual harmony and user experience consistency using modern design principles
 
 ## Directory Structure (App Router)
 
@@ -321,7 +323,6 @@ npm run lint --fix    # Auto-fix issues (when added to scripts)
 
 ### Code Style
 
-- Use **double quotes** for JSX attributes, **single quotes** for TypeScript/JavaScript
 - Prefer **arrow functions** for components and utilities
 - Use **named exports** for components (not default exports, except pages)
 - **2-space indentation** (standard Next.js convention)
