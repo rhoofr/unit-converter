@@ -27,8 +27,8 @@ Unit Converter is a responsive web application built with Next.js 15, React 19, 
 - User enters: `5`
 - User clicks: **Convert** button
 - Results display:
-  - Millimeter: `5000.0000`
-  - Centimeter: `500.0000`
+  - Millimeter: `5000`
+  - Centimeter: `500`
   - Kilometer: `0.0050`
   - Inch: `196.8504`
   - Foot: `16.4042`
