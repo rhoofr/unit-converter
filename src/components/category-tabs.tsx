@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui';
 import { UnitConverterForm } from '@/components/unit-converter-form';
+import { TimeConverterForm } from '@/components/time-converter-form';
 import { TimeConverterResults } from '@/components/time-converter-results';
 import { convertLength, getUnitIdFromName as getLengthUnitId } from '@/lib/conversions/length';
 import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conversions/volume';
@@ -144,7 +145,16 @@ export function CategoryTabs() {
                 <div className='space-y-4'>
                   <div className='pt-4 border-t border-border'>
                     {category.id === 'time' ? (
-                      <TimeConverterResults />
+                      <div className='space-y-6'>
+                        {/* Current Time Display */}
+                        <TimeConverterResults />
+
+                        {/* Divider */}
+                        <div className='border-t border-border' />
+
+                        {/* Time Converter Form */}
+                        <TimeConverterForm isActive={activeTab === category.id} />
+                      </div>
                     ) : conversionProps ? (
                       <UnitConverterForm
                         defaultUnit={category.defaultUnit}
