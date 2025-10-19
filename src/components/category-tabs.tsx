@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui';
 import { LengthConverterForm } from '@/components/length-converter-form';
+import { VolumeConverterForm } from '@/components/volume-converter-form';
 
 interface ConversionCategory {
   id: string;
@@ -107,6 +108,8 @@ export function CategoryTabs() {
                   <div className='pt-4 border-t border-border'>
                     {category.id === 'length' ? (
                       <LengthConverterForm defaultUnit={category.defaultUnit} availableUnits={category.units} />
+                    ) : category.id === 'volume' ? (
+                      <VolumeConverterForm defaultUnit={category.defaultUnit} availableUnits={category.units} />
                     ) : (
                       <>
                         <p className='text-sm text-muted-foreground mb-4'>
