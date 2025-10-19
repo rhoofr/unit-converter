@@ -17,6 +17,7 @@ import { UnitConverterForm } from '@/components/unit-converter-form';
 import { convertLength, getUnitIdFromName as getLengthUnitId } from '@/lib/conversions/length';
 import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conversions/volume';
 import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conversions/weight';
+import { convertTemperature, getUnitIdFromName as getTemperatureUnitId } from '@/lib/conversions/temperature';
 
 interface ConversionCategory {
   id: string;
@@ -109,6 +110,11 @@ export function CategoryTabs() {
               return {
                 convertFunction: convertWeight,
                 getUnitIdFunction: getWeightUnitId,
+              };
+            case 'temperature':
+              return {
+                convertFunction: convertTemperature,
+                getUnitIdFunction: getTemperatureUnitId,
               };
             default:
               return null;
