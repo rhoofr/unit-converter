@@ -1,7 +1,7 @@
 import type { NextConfig } from 'next';
 
 const isProd = process.env.NODE_ENV === 'production';
-const repoName = 'https://github.com/rhoofr/unit-converter';
+const repoName = 'unit-converter';
 
 const nextConfig: NextConfig = {
   output: 'export', // Enable static HTML export
