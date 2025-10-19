@@ -72,8 +72,10 @@ const categories: ConversionCategory[] = [
 ];
 
 export function CategoryTabs() {
+  const [activeTab, setActiveTab] = React.useState('length');
+
   return (
-    <Tabs defaultValue='length' className='w-full'>
+    <Tabs defaultValue='length' className='w-full' onValueChange={setActiveTab}>
       <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 h-auto p-0 bg-muted'>
         {categories.map((category) => {
           const Icon = category.icon;
@@ -146,6 +148,7 @@ export function CategoryTabs() {
                         availableUnits={category.units}
                         convertFunction={conversionProps.convertFunction}
                         getUnitIdFunction={conversionProps.getUnitIdFunction}
+                        isActive={activeTab === category.id}
                       />
                     ) : (
                       <>

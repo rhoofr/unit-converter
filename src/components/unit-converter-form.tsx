@@ -37,6 +37,10 @@ interface UnitConverterFormProps {
    * @returns The unit ID or undefined if not found
    */
   getUnitIdFunction: (unitName: string) => string | undefined;
+  /**
+   * Whether this form's tab is currently active
+   */
+  isActive: boolean;
 }
 
 // Zod schema for form validation
@@ -58,6 +62,7 @@ export function UnitConverterForm({
   availableUnits,
   convertFunction,
   getUnitIdFunction,
+  isActive,
 }: UnitConverterFormProps) {
   const [results, setResults] = React.useState<ConversionResultType[]>([]);
   const [hasConverted, setHasConverted] = React.useState(false);
@@ -86,6 +91,17 @@ export function UnitConverterForm({
   React.useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  // Focus input when tab becomes active
+  React.useEffect(() => {
+    if (isActive) {
+      // Use requestAnimationFrame to ensure the tab content is fully visible
+      // before attempting to focus the input
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    }
+  }, [isActive]);
 
   // Handle unit change: clear results, clear input, focus input
   const handleUnitChange = (newUnit: string) => {
