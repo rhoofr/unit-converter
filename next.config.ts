@@ -1,7 +1,15 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+
+const isProd = process.env.NODE_ENV === 'production';
+const repoName = 'https://github.com/rhoofr/unit-converter';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'export', // Enable static HTML export
+  basePath: isProd ? `/${repoName}` : '',
+  assetPrefix: isProd ? `/${repoName}/` : '',
+  images: {
+    unoptimized: true, // GitHub Pages doesn't support Next.js Image Optimization
+  },
 };
 
 export default nextConfig;
