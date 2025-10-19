@@ -142,7 +142,7 @@ export function UnitConverterForm({
                       {...field}
                       ref={inputRef}
                       onKeyDown={handleKeyDown}
-                      className='text-lg'
+                      className='text-base sm:text-lg'
                       autoComplete='off'
                     />
                   </FormControl>
@@ -160,7 +160,7 @@ export function UnitConverterForm({
                   <FormLabel>From Unit</FormLabel>
                   <Select onValueChange={handleUnitChange} defaultValue={field.value}>
                     <FormControl>
-                      <SelectTrigger className='text-lg'>
+                      <SelectTrigger className='text-base sm:text-lg'>
                         <SelectValue placeholder='Select unit' />
                       </SelectTrigger>
                     </FormControl>

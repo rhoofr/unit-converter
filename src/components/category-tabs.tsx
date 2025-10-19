@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui';
 import { UnitConverterForm } from '@/components/unit-converter-form';
+import { TimeConverterResults } from '@/components/time-converter-results';
 import { convertLength, getUnitIdFromName as getLengthUnitId } from '@/lib/conversions/length';
 import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conversions/volume';
 import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conversions/weight';
@@ -83,7 +84,7 @@ export function CategoryTabs() {
             <TabsTrigger
               key={category.id}
               value={category.id}
-              className='flex items-center gap-2 px-3 py-2 data-[state=active]:bg-background'>
+              className='text-sm sm:text-base flex items-center gap-2 px-3 py-2 data-[state=active]:bg-background'>
               <Icon className='h-4 w-4' />
               <span className='hidden sm:inline'>{category.name}</span>
               <span className='sm:hidden'>{category.name}</span>
@@ -134,15 +135,17 @@ export function CategoryTabs() {
                     <Icon className='h-6 w-6 text-primary' />
                   </div>
                   <div>
-                    <CardTitle className='text-2xl'>{category.name} Converter</CardTitle>
-                    <CardDescription className='mt-1'>{category.description}</CardDescription>
+                    <CardTitle className='text-xl sm:text-2xl'>{category.name} Converter</CardTitle>
+                    <CardDescription className='text-xs sm:text-sm mt-1'>{category.description}</CardDescription>
                   </div>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className='space-y-4'>
                   <div className='pt-4 border-t border-border'>
-                    {conversionProps ? (
+                    {category.id === 'time' ? (
+                      <TimeConverterResults />
+                    ) : conversionProps ? (
                       <UnitConverterForm
                         defaultUnit={category.defaultUnit}
                         availableUnits={category.units}

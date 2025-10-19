@@ -33,10 +33,10 @@ export function ConversionResultItem({ unitName, symbol, value, className }: Con
         className
       )}>
       <div className='flex justify-between items-center'>
-        <span className='text-sm text-muted-foreground'>{unitName}</span>
+        <span className='text-xs sm:text-sm text-muted-foreground'>{unitName}</span>
         <span className='text-xs text-muted-foreground'>({symbol})</span>
       </div>
-      <p className='text-xl font-bold text-foreground mt-2 break-words'>
+      <p className='text-base sm:text-lg font-bold text-foreground mt-2 break-words'>
         {value} {symbol}
       </p>
     </div>
