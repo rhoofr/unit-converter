@@ -4,11 +4,23 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Input,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  ConversionResultsList,
+} from '@/components/ui';
+import type { ConversionResult as ConversionResultType } from '@/components/ui';
 import { convertLength, getUnitIdFromName } from '@/lib/conversions/length';
-import type { ConversionResult } from '@/lib/conversions/length';
 
 interface LengthConverterFormProps {
   defaultUnit: string;
@@ -30,7 +42,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export function LengthConverterForm({ defaultUnit, availableUnits }: LengthConverterFormProps) {
-  const [results, setResults] = React.useState<ConversionResult[]>([]);
+  const [results, setResults] = React.useState<ConversionResultType[]>([]);
   const [hasConverted, setHasConverted] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -139,30 +151,7 @@ export function LengthConverterForm({ defaultUnit, availableUnits }: LengthConve
       </Form>
 
       {/* Results Display */}
-      {hasConverted && results.length > 0 && (
-        <div className='border-t border-border pt-6'>
-          <h3 className='text-lg font-semibold text-foreground mb-4'>Conversion Results</h3>
-          <div className='grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 gap-3'>
-            {results.map((result) => (
-              <div
-                key={result.unitId}
-                className='bg-card border border-border rounded-lg p-4 hover:border-primary/50 transition-colors'>
-                <div className='flex justify-between items-center'>
-                  <span className='text-sm text-muted-foreground'>{result.unitName}</span>
-                  <span className='text-xs text-muted-foreground'>({result.symbol})</span>
-                </div>
-                <p className='text-xl font-bold text-foreground mt-2 break-words'>{result.value}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {hasConverted && results.length === 0 && (
-        <div className='text-center text-muted-foreground py-8'>
-          <p>No conversion results available.</p>
-        </div>
-      )}
+      {hasConverted && <ConversionResultsList results={results} />}
     </div>
   );
 }

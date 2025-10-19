@@ -2,8 +2,17 @@
 
 import * as React from 'react';
 import { Ruler, Droplet, Weight, Thermometer, Clock } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui';
 import { LengthConverterForm } from '@/components/length-converter-form';
 
 interface ConversionCategory {
