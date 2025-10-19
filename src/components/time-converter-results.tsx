@@ -2,8 +2,7 @@
 
 import * as React from 'react';
 import { RefreshCw, Clock } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Button, Card, CardContent } from '@/components/ui';
 import { getCurrentTime, formatLocalDatetimeDisplay, formatUTCDatetimeDisplay } from '@/lib/conversions/time';
 import type { TimeConversionResult } from '@/lib/conversions/time';
 

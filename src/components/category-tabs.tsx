@@ -20,14 +20,15 @@ import { convertLength, getUnitIdFromName as getLengthUnitId } from '@/lib/conve
 import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conversions/volume';
 import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conversions/weight';
 import { convertTemperature, getUnitIdFromName as getTemperatureUnitId } from '@/lib/conversions/temperature';
+import { useUnitPreferencesContext } from '@/contexts/unit-preferences-context';
+import type { CategoryId } from '@/hooks/use-unit-preferences';
 
 interface ConversionCategory {
-  id: string;
+  id: CategoryId;
   name: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   units: string[];
-  defaultUnit: string;
 }
 
 const categories: ConversionCategory[] = [
@@ -37,7 +38,6 @@ const categories: ConversionCategory[] = [
     description: 'Convert between metric and imperial distance measurements',
     icon: Ruler,
     units: ['Kilometers', 'Miles', 'Millimeters', 'Centimeters', 'Meters', 'Inches', 'Feet', 'Yards'],
-    defaultUnit: 'Kilometers',
   },
   {
     id: 'volume',
@@ -45,7 +45,6 @@ const categories: ConversionCategory[] = [
     description: 'Convert between metric and US liquid measurements',
     icon: Droplet,
     units: ['Milliliters', 'Liters', 'Fluid Ounces', 'Cups', 'Pints', 'Quarts', 'Gallons'],
-    defaultUnit: 'Liters',
   },
   {
     id: 'weight',
@@ -53,7 +52,6 @@ const categories: ConversionCategory[] = [
     description: 'Convert between metric and imperial mass measurements',
     icon: Weight,
     units: ['Grams', 'Kilograms', 'Metric Tons', 'Ounces', 'Pounds', 'US Tons', 'Stone'],
-    defaultUnit: 'Ounces',
   },
   {
     id: 'temperature',
@@ -61,7 +59,6 @@ const categories: ConversionCategory[] = [
     description: 'Convert between common temperature scales',
     icon: Thermometer,
     units: ['Celsius', 'Fahrenheit', 'Kelvin'],
-    defaultUnit: 'Celsius',
   },
   {
     id: 'time',
@@ -69,12 +66,33 @@ const categories: ConversionCategory[] = [
     description: 'Convert between Unix epoch and datetime formats',
     icon: Clock,
     units: ['Unix Epoch (Seconds)', 'Unix Epoch (Milliseconds)', 'Local Datetime', 'UTC Datetime'],
-    defaultUnit: 'Unix Epoch (Seconds)',
   },
 ];
 
 export function CategoryTabs() {
   const [activeTab, setActiveTab] = React.useState('length');
+  const { getDefaultUnit, isLoaded } = useUnitPreferencesContext();
+
+  // Don't render forms until preferences are loaded to prevent hydration mismatch
+  if (!isLoaded) {
+    return (
+      <div className='w-full'>
+        <div className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 h-auto p-0 bg-muted rounded-md'>
+          {categories.map((category) => {
+            const Icon = category.icon;
+            return (
+              <div
+                key={category.id}
+                className='text-sm sm:text-base flex items-center justify-center gap-2 px-3 py-2 rounded-sm bg-background/50'>
+                <Icon className='h-4 w-4' />
+                <span>{category.name}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Tabs defaultValue='length' className='w-full' onValueChange={setActiveTab}>
@@ -153,11 +171,14 @@ export function CategoryTabs() {
                         <div className='border-t border-border' />
 
                         {/* Time Converter Form */}
-                        <TimeConverterForm isActive={activeTab === category.id} />
+                        <TimeConverterForm
+                          defaultUnit={getDefaultUnit(category.id)}
+                          isActive={activeTab === category.id}
+                        />
                       </div>
                     ) : conversionProps ? (
                       <UnitConverterForm
-                        defaultUnit={category.defaultUnit}
+                        defaultUnit={getDefaultUnit(category.id)}
                         availableUnits={category.units}
                         convertFunction={conversionProps.convertFunction}
                         getUnitIdFunction={conversionProps.getUnitIdFunction}

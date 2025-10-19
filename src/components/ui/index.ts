@@ -26,3 +26,15 @@ export {
 } from './select';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Form, FormItem, FormLabel, FormControl, FormDescription, FormMessage, FormField } from './form';
+export {
+  Dialog,
+  DialogPortal,
+  DialogOverlay,
+  DialogTrigger,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription,
+} from './dialog';

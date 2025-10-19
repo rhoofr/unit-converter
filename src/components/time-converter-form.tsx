@@ -20,6 +20,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Card,
+  CardContent,
 } from '@/components/ui';
 import {
   fromUnixSeconds,
@@ -33,16 +35,37 @@ import {
   isValidDatetime,
 } from '@/lib/conversions/time';
 import type { TimeConversionResult } from '@/lib/conversions/time';
-import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
 type TimeUnit = 'unix-seconds' | 'unix-milliseconds' | 'local-datetime' | 'utc-datetime';
 
 interface TimeConverterFormProps {
   /**
+   * The default unit to use (display name like "Unix Epoch (Seconds)")
+   */
+  defaultUnit: string;
+  /**
    * Whether this form's tab is currently active
    */
   isActive: boolean;
+}
+
+/**
+ * Convert display name to internal TimeUnit ID
+ */
+function getTimeUnitId(displayName: string): TimeUnit {
+  switch (displayName) {
+    case 'Unix Epoch (Seconds)':
+      return 'unix-seconds';
+    case 'Unix Epoch (Milliseconds)':
+      return 'unix-milliseconds';
+    case 'Local Datetime':
+      return 'local-datetime';
+    case 'UTC Datetime':
+      return 'utc-datetime';
+    default:
+      return 'unix-seconds'; // fallback
+  }
 }
 
 // Dynamic Zod schema based on selected unit type
@@ -113,10 +136,11 @@ const timeUnits: Array<{ id: TimeUnit; name: string; description: string }> = [
   },
 ];
 
-export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
+export function TimeConverterForm({ defaultUnit, isActive }: TimeConverterFormProps) {
   const [results, setResults] = React.useState<TimeConversionResult | null>(null);
   const [hasConverted, setHasConverted] = React.useState(false);
-  const [selectedUnit, setSelectedUnit] = React.useState<TimeUnit>('unix-seconds');
+  const defaultUnitId = getTimeUnitId(defaultUnit);
+  const [selectedUnit, setSelectedUnit] = React.useState<TimeUnit>(defaultUnitId);
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
@@ -124,7 +148,7 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
     resolver: zodResolver(createFormSchema(selectedUnit)),
     defaultValues: {
       value: '',
-      fromUnit: 'unix-seconds',
+      fromUnit: defaultUnitId,
     },
   });
 
@@ -159,6 +183,19 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
       });
     }
   };
+
+  // Update form when defaultUnit changes (e.g., user preferences change)
+  React.useEffect(() => {
+    const newUnitId = getTimeUnitId(defaultUnit);
+    setSelectedUnit(newUnitId);
+    form.reset({
+      value: '',
+      fromUnit: newUnitId,
+    });
+    setSelectedDate(null);
+    setResults(null);
+    setHasConverted(false);
+  }, [defaultUnit, form]);
 
   // Auto-focus input on mount
   React.useEffect(() => {
@@ -321,7 +358,7 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Time Format</FormLabel>
-                  <Select onValueChange={handleUnitChange} defaultValue={field.value}>
+                  <Select onValueChange={handleUnitChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className='text-base sm:text-lg'>
                         <SelectValue placeholder='Select time format' />
@@ -335,9 +372,6 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
                       ))}
                     </SelectContent>
                   </Select>
-                  {/* {selectedUnitInfo && (
-                    <p className='text-xs text-muted-foreground mt-1'>{selectedUnitInfo.description}</p>
-                  )} */}
                   <FormMessage />
                 </FormItem>
               )}

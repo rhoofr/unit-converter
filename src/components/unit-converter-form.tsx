@@ -87,6 +87,16 @@ export function UnitConverterForm({
     }
   };
 
+  // Update form when defaultUnit changes (e.g., user preferences change)
+  React.useEffect(() => {
+    form.reset({
+      value: '',
+      fromUnit: defaultUnit,
+    });
+    setResults([]);
+    setHasConverted(false);
+  }, [defaultUnit, form]);
+
   // Auto-focus input on mount
   React.useEffect(() => {
     inputRef.current?.focus();
@@ -158,7 +168,7 @@ export function UnitConverterForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>From Unit</FormLabel>
-                  <Select onValueChange={handleUnitChange} defaultValue={field.value}>
+                  <Select onValueChange={handleUnitChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className='text-base sm:text-lg'>
                         <SelectValue placeholder='Select unit' />

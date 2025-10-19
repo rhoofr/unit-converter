@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { CategoryTabs } from '@/components/category-tabs';
+import { AppHeader } from '@/components/app-header';
 
 export const metadata: Metadata = {
   title: 'Unit Converter - Convert Between Multiple Units',
@@ -10,14 +11,7 @@ export default function Home() {
   return (
     <div className='min-h-screen bg-background'>
       {/* Header */}
-      <header className='border-b border-border bg-card'>
-        <div className='container mx-auto px-4 py-4 sm:px-6 lg:px-8'>
-          <h1 className='text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground'>Unit Converter</h1>
-          <p className='mt-2 text-sm sm:text-base text-muted-foreground'>
-            Convert between different units of measurement
-          </p>
-        </div>
-      </header>
+      <AppHeader />
 
       {/* Main Content */}
       <main className='container mx-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8'>
