@@ -127,6 +127,7 @@ export function UnitConverterForm({
                       ref={inputRef}
                       onKeyDown={handleKeyDown}
                       className='text-lg'
+                      autoComplete='off'
                     />
                   </FormControl>
                   <FormMessage />

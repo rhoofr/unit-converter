@@ -16,6 +16,7 @@ import {
 import { UnitConverterForm } from '@/components/unit-converter-form';
 import { convertLength, getUnitIdFromName as getLengthUnitId } from '@/lib/conversions/length';
 import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conversions/volume';
+import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conversions/weight';
 
 interface ConversionCategory {
   id: string;
@@ -49,7 +50,7 @@ const categories: ConversionCategory[] = [
     description: 'Convert between metric and imperial mass measurements',
     icon: Weight,
     units: ['Grams', 'Kilograms', 'Metric Tons', 'Ounces', 'Pounds', 'US Tons', 'Stone'],
-    defaultUnit: 'Ounce',
+    defaultUnit: 'Ounces',
   },
   {
     id: 'temperature',
@@ -103,6 +104,11 @@ export function CategoryTabs() {
               return {
                 convertFunction: convertVolume,
                 getUnitIdFunction: getVolumeUnitId,
+              };
+            case 'weight':
+              return {
+                convertFunction: convertWeight,
+                getUnitIdFunction: getWeightUnitId,
               };
             default:
               return null;
