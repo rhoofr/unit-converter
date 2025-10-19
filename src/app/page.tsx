@@ -32,13 +32,6 @@ export default function Home() {
         {/* Category Tabs */}
         <CategoryTabs />
       </main>
-
-      {/* Footer */}
-      <footer className='border-t border-border bg-card mt-12'>
-        <div className='container mx-auto px-4 py-6 sm:px-6 lg:px-8'>
-          <p className='text-center text-sm text-muted-foreground'>Built with Next.js 15, React 19, and TypeScript</p>
-        </div>
-      </footer>
     </div>
   );
 }
