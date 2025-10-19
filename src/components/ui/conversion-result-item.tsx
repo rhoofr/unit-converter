@@ -36,7 +36,9 @@ export function ConversionResultItem({ unitName, symbol, value, className }: Con
         <span className='text-sm text-muted-foreground'>{unitName}</span>
         <span className='text-xs text-muted-foreground'>({symbol})</span>
       </div>
-      <p className='text-xl font-bold text-foreground mt-2 break-words'>{value}</p>
+      <p className='text-xl font-bold text-foreground mt-2 break-words'>
+        {value} {symbol}
+      </p>
     </div>
   );
 }
