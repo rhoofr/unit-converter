@@ -4,6 +4,9 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import DatePicker from 'react-datepicker';
+import { Calendar } from 'lucide-react';
+import 'react-datepicker/dist/react-datepicker.css';
 import {
   Form,
   FormControl,
@@ -31,6 +34,7 @@ import {
 } from '@/lib/conversions/time';
 import type { TimeConversionResult } from '@/lib/conversions/time';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 type TimeUnit = 'unix-seconds' | 'unix-milliseconds' | 'local-datetime' | 'utc-datetime';
 
@@ -113,6 +117,7 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
   const [results, setResults] = React.useState<TimeConversionResult | null>(null);
   const [hasConverted, setHasConverted] = React.useState(false);
   const [selectedUnit, setSelectedUnit] = React.useState<TimeUnit>('unix-seconds');
+  const [selectedDate, setSelectedDate] = React.useState<Date | null>(null);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const form = useForm<FormData>({
@@ -169,12 +174,64 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
     }
   }, [isActive]);
 
+  // Handle date picker change - auto-convert when date is selected
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date);
+
+    if (date) {
+      // Format date to ISO string for conversion
+      let dateString: string;
+
+      if (selectedUnit === 'utc-datetime') {
+        // For UTC, treat the selected date/time as UTC (not local time)
+        // Get the date components from the picker (which are in local time display)
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        // Format as ISO string but interpret these values as UTC
+        dateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
+      } else {
+        // For local datetime, format without timezone
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        dateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+      }
+
+      // Update form value
+      form.setValue('value', dateString);
+
+      // Auto-convert immediately
+      try {
+        let conversionResult: TimeConversionResult;
+
+        if (selectedUnit === 'local-datetime') {
+          conversionResult = fromLocalDatetime(dateString);
+        } else {
+          conversionResult = fromUTCDatetime(dateString);
+        }
+
+        setResults(conversionResult);
+        setHasConverted(true);
+      } catch (error) {
+        console.error('Conversion error:', error);
+      }
+    }
+  };
+
   // Handle unit change: clear results, clear input, focus input, update schema
   const handleUnitChange = (newUnit: string) => {
     const newUnitType = newUnit as TimeUnit;
     setSelectedUnit(newUnitType);
     form.setValue('fromUnit', newUnit);
     form.setValue('value', '');
+    setSelectedDate(null);
     setResults(null);
     setHasConverted(false);
     form.clearErrors();
@@ -185,7 +242,7 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
     }, 0);
   };
 
-  // Handle Enter key press
+  // Handle Enter key press (only for Unix timestamp inputs)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -193,39 +250,64 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
     }
   };
 
-  // Get input type and placeholder based on selected unit
+  // Get input config for Unix timestamp inputs
   const getInputConfig = () => {
-    switch (selectedUnit) {
-      case 'unix-seconds':
-        return {
-          type: 'text',
-          placeholder: 'e.g., 1729354800',
-          inputMode: 'numeric' as const,
-        };
-      case 'unix-milliseconds':
-        return {
-          type: 'text',
-          placeholder: 'e.g., 1729354800000',
-          inputMode: 'numeric' as const,
-        };
-      case 'local-datetime':
-      case 'utc-datetime':
-        return {
-          type: 'datetime-local',
-          placeholder: '',
-          inputMode: 'none' as const,
-        };
-      default:
-        return {
-          type: 'text',
-          placeholder: 'Enter value',
-          inputMode: 'text' as const,
-        };
+    if (selectedUnit === 'unix-seconds') {
+      return {
+        type: 'text' as const,
+        placeholder: 'e.g., 1729354800',
+        inputMode: 'numeric' as const,
+      };
+    } else if (selectedUnit === 'unix-milliseconds') {
+      return {
+        type: 'text' as const,
+        placeholder: 'e.g., 1729354800000',
+        inputMode: 'numeric' as const,
+      };
     }
+    return {
+      type: 'text' as const,
+      placeholder: 'Enter value',
+      inputMode: 'text' as const,
+    };
   };
 
   const inputConfig = getInputConfig();
-  const selectedUnitInfo = timeUnits.find((u) => u.id === selectedUnit);
+
+  // Custom input component for DatePicker with calendar icon
+  const DatePickerInput = React.forwardRef<
+    HTMLInputElement,
+    {
+      value?: string;
+      onClick?: () => void;
+      placeholder?: string;
+    }
+  >(({ value, onClick, placeholder }, ref) => (
+    <div className='relative w-full'>
+      <input
+        ref={ref}
+        value={value}
+        onClick={onClick}
+        placeholder={placeholder}
+        readOnly
+        className={cn(
+          'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 pr-10',
+          'text-base sm:text-lg ring-offset-background',
+          'placeholder:text-muted-foreground',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
+          'cursor-pointer'
+        )}
+      />
+      <button
+        type='button'
+        onClick={onClick}
+        className='absolute right-0 top-0 h-10 px-3 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors'>
+        <Calendar className='h-4 w-4' />
+      </button>
+    </div>
+  ));
+
+  DatePickerInput.displayName = 'DatePickerInput';
 
   return (
     <div className='space-y-6'>
@@ -269,16 +351,31 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
-                    <Input
-                      type={inputConfig.type}
-                      inputMode={inputConfig.inputMode}
-                      placeholder={inputConfig.placeholder}
-                      {...field}
-                      ref={inputRef}
-                      onKeyDown={handleKeyDown}
-                      className='text-base sm:text-lg'
-                      autoComplete='off'
-                    />
+                    {selectedUnit === 'local-datetime' || selectedUnit === 'utc-datetime' ? (
+                      <DatePicker
+                        selected={selectedDate}
+                        onChange={handleDateChange}
+                        showTimeSelect
+                        timeFormat='HH:mm'
+                        timeIntervals={1}
+                        dateFormat={selectedUnit === 'utc-datetime' ? "yyyy-MM-dd HH:mm 'UTC'" : 'yyyy-MM-dd HH:mm'}
+                        placeholderText='Select date and time'
+                        customInput={<DatePickerInput />}
+                        showPopperArrow={false}
+                        timeCaption='Time'
+                      />
+                    ) : (
+                      <Input
+                        type={inputConfig.type}
+                        inputMode={inputConfig.inputMode}
+                        placeholder={inputConfig.placeholder}
+                        {...field}
+                        ref={inputRef}
+                        onKeyDown={handleKeyDown}
+                        className='text-base sm:text-lg'
+                        autoComplete='off'
+                      />
+                    )}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -286,9 +383,14 @@ export function TimeConverterForm({ isActive }: TimeConverterFormProps) {
             />
           </div>
 
-          <p className='text-xs text-muted-foreground'>
-            Press <kbd className='px-2 py-1 bg-muted rounded text-xs'>Enter</kbd> to convert
-          </p>
+          {(selectedUnit === 'unix-seconds' || selectedUnit === 'unix-milliseconds') && (
+            <p className='text-xs text-muted-foreground'>
+              Press <kbd className='px-2 py-1 bg-muted rounded text-xs'>Enter</kbd> to convert
+            </p>
+          )}
+          {(selectedUnit === 'local-datetime' || selectedUnit === 'utc-datetime') && (
+            <p className='text-xs text-muted-foreground'>Select a date and time to automatically convert</p>
+          )}
         </form>
       </Form>
 
