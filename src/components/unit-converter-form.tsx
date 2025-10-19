@@ -20,11 +20,23 @@ import {
   ConversionResultsList,
 } from '@/components/ui';
 import type { ConversionResult as ConversionResultType } from '@/components/ui';
-import { convertLength, getUnitIdFromName } from '@/lib/conversions/length';
 
-interface LengthConverterFormProps {
+interface UnitConverterFormProps {
   defaultUnit: string;
   availableUnits: string[];
+  /**
+   * Function to convert a value from one unit to all other units in the category
+   * @param value - The numeric value to convert
+   * @param unitId - The ID of the source unit
+   * @returns Array of conversion results
+   */
+  convertFunction: (value: number, unitId: string) => ConversionResultType[];
+  /**
+   * Function to get the unit ID from the unit name
+   * @param unitName - The display name of the unit
+   * @returns The unit ID or undefined if not found
+   */
+  getUnitIdFunction: (unitName: string) => string | undefined;
 }
 
 // Zod schema for form validation
@@ -41,7 +53,12 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function LengthConverterForm({ defaultUnit, availableUnits }: LengthConverterFormProps) {
+export function UnitConverterForm({
+  defaultUnit,
+  availableUnits,
+  convertFunction,
+  getUnitIdFunction,
+}: UnitConverterFormProps) {
   const [results, setResults] = React.useState<ConversionResultType[]>([]);
   const [hasConverted, setHasConverted] = React.useState(false);
   const inputRef = React.useRef<HTMLInputElement>(null);
@@ -56,10 +73,10 @@ export function LengthConverterForm({ defaultUnit, availableUnits }: LengthConve
 
   const handleConvert = (data: FormData) => {
     const numericValue = parseFloat(data.value);
-    const unitId = getUnitIdFromName(data.fromUnit);
+    const unitId = getUnitIdFunction(data.fromUnit);
 
     if (unitId) {
-      const conversionResults = convertLength(numericValue, unitId);
+      const conversionResults = convertFunction(numericValue, unitId);
       setResults(conversionResults);
       setHasConverted(true);
     }
