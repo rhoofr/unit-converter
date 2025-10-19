@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Ruler, Droplet, Weight, Thermometer, Clock } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { LengthConverterForm } from '@/components/length-converter-form';
 
 interface ConversionCategory {
   id: string;
@@ -11,6 +12,7 @@ interface ConversionCategory {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   units: string[];
+  defaultUnit: string;
 }
 
 const categories: ConversionCategory[] = [
@@ -19,23 +21,23 @@ const categories: ConversionCategory[] = [
     name: 'Length',
     description: 'Convert between metric and imperial distance measurements',
     icon: Ruler,
-    units: ['Millimeter', 'Centimeter', 'Meter', 'Kilometer', 'Inch', 'Foot', 'Yard', 'Mile'],
-    defaultUnit: 'Kilometer',
+    units: ['Kilometers', 'Miles', 'Millimeters', 'Centimeters', 'Meters', 'Inches', 'Feet', 'Yards'],
+    defaultUnit: 'Kilometers',
   },
   {
     id: 'volume',
     name: 'Volume',
     description: 'Convert between metric and US liquid measurements',
     icon: Droplet,
-    units: ['Milliliter', 'Liter', 'Fluid Ounce', 'Cup', 'Pint', 'Quart', 'Gallon'],
-    defaultUnit: 'Liter',
+    units: ['Milliliters', 'Liters', 'Fluid Ounces', 'Cups', 'Pints', 'Quarts', 'Gallons'],
+    defaultUnit: 'Liters',
   },
   {
     id: 'weight',
     name: 'Weight',
     description: 'Convert between metric and imperial mass measurements',
     icon: Weight,
-    units: ['Gram', 'Kilogram', 'Metric Ton', 'Ounce', 'Pound', 'US Ton', 'Stone'],
+    units: ['Grams', 'Kilograms', 'Metric Tons', 'Ounces', 'Pounds', 'US Tons', 'Stone'],
     defaultUnit: 'Ounce',
   },
   {
@@ -59,7 +61,7 @@ const categories: ConversionCategory[] = [
 export function CategoryTabs() {
   return (
     <Tabs defaultValue='length' className='w-full'>
-      <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 h-auto p-1 bg-muted'>
+      <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 h-auto p-0 bg-muted'>
         {categories.map((category) => {
           const Icon = category.icon;
           return (
@@ -78,7 +80,7 @@ export function CategoryTabs() {
       {categories.map((category) => {
         const Icon = category.icon;
         return (
-          <TabsContent key={category.id} value={category.id} className='mt-6'>
+          <TabsContent key={category.id} value={category.id} className='mt-2'>
             <Card>
               <CardHeader>
                 <div className='flex items-center gap-3'>
@@ -93,28 +95,21 @@ export function CategoryTabs() {
               </CardHeader>
               <CardContent>
                 <div className='space-y-4'>
-                  <div>
-                    <h3 className='text-sm font-medium text-foreground mb-3'>Available Units:</h3>
-                    <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2'>
-                      {category.units.map((unit) => (
-                        <div
-                          key={unit}
-                          className='px-3 py-2 bg-muted text-muted-foreground rounded-md text-sm text-center'>
-                          {unit}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
                   <div className='pt-4 border-t border-border'>
-                    <p className='text-sm text-muted-foreground mb-4'>
-                      Enter a value in any unit and convert to all other units in this category. Results are precise to
-                      4 decimal places.
-                    </p>
-                    <div className='bg-muted/50 rounded-lg p-6 text-center'>
-                      <p className='text-muted-foreground'>Conversion form will appear here</p>
-                      <p className='text-xs text-muted-foreground mt-2'>Coming in the next iteration</p>
-                    </div>
+                    {category.id === 'length' ? (
+                      <LengthConverterForm defaultUnit={category.defaultUnit} availableUnits={category.units} />
+                    ) : (
+                      <>
+                        <p className='text-sm text-muted-foreground mb-4'>
+                          Enter a value in any unit and convert to all other units in this category. Results are precise
+                          and formatted smartly.
+                        </p>
+                        <div className='bg-muted/50 rounded-lg p-6 text-center'>
+                          <p className='text-muted-foreground'>Conversion form will appear here</p>
+                          <p className='text-xs text-muted-foreground mt-2'>Coming in the next iteration</p>
+                        </div>
+                      </>
+                    )}
                   </div>
                 </div>
               </CardContent>

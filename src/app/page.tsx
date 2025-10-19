@@ -11,7 +11,7 @@ export default function Home() {
     <div className='min-h-screen bg-background'>
       {/* Header */}
       <header className='border-b border-border bg-card'>
-        <div className='container mx-auto px-4 py-6 sm:px-6 lg:px-8'>
+        <div className='container mx-auto px-4 py-4 sm:px-6 lg:px-8'>
           <h1 className='text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground'>Unit Converter</h1>
           <p className='mt-2 text-sm sm:text-base text-muted-foreground'>
             Convert between different units of measurement
@@ -20,14 +20,11 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className='container mx-auto px-4 py-8 sm:px-6 lg:px-8 lg:py-12'>
+      <main className='container mx-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8'>
         {/* Welcome Section */}
-        <section className='mb-6 lg:mb-8'>
+        <section className='mb-4 lg:mb-6'>
           <h2 className='text-xl sm:text-2xl font-semibold text-foreground mb-2'>Select a Category</h2>
-          <p className='text-muted-foreground'>
-            Choose a conversion category using the tabs below. All conversions are instant and precise to 4 decimal
-            places.
-          </p>
+          <p className='text-muted-foreground'>Choose a conversion category using the tabs below.</p>
         </section>
 
         {/* Category Tabs */}

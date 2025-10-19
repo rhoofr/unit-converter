@@ -16,7 +16,7 @@ Unit Converter is a responsive web application built with Next.js 15, React 19, 
 2. User selects a **source unit** from the available units in that category
 3. User enters a **numeric value** to convert
 4. Application displays **all conversions** to other units in the same category
-5. All decimal results are displayed to **4 decimal places** for precision
+5. All decimal results are displayed to **2 decimal places** for precision
 
 ### Example Usage
 
@@ -105,7 +105,7 @@ Convert between Unix epoch timestamps and human-readable datetime formats:
 - **Client-side validation** using React Hook Form + Zod
 - **Type-safe inputs** with TypeScript interfaces
 - **Real-time feedback** for invalid inputs
-- **Numeric precision**: 4 decimal places for all results
+- **Numeric precision**: 2 decimal places for all results unless the decimal is zero, in which case no decimal places should be shown
 
 ### Data Architecture
 
@@ -128,7 +128,7 @@ interface Unit {
 interface ConversionResult {
   unitId: string;
   unitName: string;
-  value: string; // Formatted to 4 decimal places
+  value: string; // Formatted to 2 decimal places
 }
 ```
 
@@ -146,7 +146,7 @@ Each category has a **base unit** for internal calculations:
 
 1. Convert input value to base unit using `toBase()`
 2. Convert base unit to all target units using `fromBase()`
-3. Format results to 4 decimal places
+3. Format results to 2 decimal places if decimal is not zero
 4. Display in responsive grid layout
 
 ## User Experience Goals
