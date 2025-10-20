@@ -213,10 +213,6 @@ export function UnitConverterForm({
               )}
             />
           </div>
-
-          <p className='hidden sm:block text-xs text-muted-foreground'>
-            Press <kbd className='px-2 py-1 bg-muted rounded text-xs'>Enter</kbd> to convert
-          </p>
         </form>
       </Form>
 
