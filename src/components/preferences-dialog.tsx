@@ -101,10 +101,7 @@ export function PreferencesDialog({ open, onOpenChange }: PreferencesDialogProps
       <DialogContent className='sm:max-w-[550px]'>
         <DialogHeader>
           <DialogTitle className='text-xl sm:text-2xl'>Unit Preferences</DialogTitle>
-          <DialogDescription className='text-sm sm:text-base'>
-            Choose your preferred default unit for each category. These will be selected automatically when you switch
-            between categories.
-          </DialogDescription>
+          <DialogDescription className='text-sm sm:text-base'>Choose your preferred default units.</DialogDescription>
         </DialogHeader>
 
         <div className='space-y-4 py-4'>
