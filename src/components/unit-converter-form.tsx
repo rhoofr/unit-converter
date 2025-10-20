@@ -74,6 +74,7 @@ export function UnitConverterForm({
       value: '',
       fromUnit: defaultUnit,
     },
+    mode: 'onChange', // Enable real-time validation
   });
 
   const handleConvert = (data: FormData) => {
@@ -112,6 +113,30 @@ export function UnitConverterForm({
       });
     }
   }, [isActive]);
+
+  // Auto-convert when value or unit changes (with debounce)
+  React.useEffect(() => {
+    const subscription = form.watch((formData) => {
+      // Only auto-convert if both value and unit are present and valid
+      if (formData.value && formData.fromUnit) {
+        const numericValue = parseFloat(formData.value);
+        if (!isNaN(numericValue) && isFinite(numericValue)) {
+          const unitId = getUnitIdFunction(formData.fromUnit);
+          if (unitId) {
+            const conversionResults = convertFunction(numericValue, unitId);
+            setResults(conversionResults);
+            setHasConverted(true);
+          }
+        }
+      } else {
+        // Clear results if input is cleared
+        setResults([]);
+        setHasConverted(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, convertFunction, getUnitIdFunction]);
 
   // Handle unit change: clear results, clear input, focus input
   const handleUnitChange = (newUnit: string) => {
@@ -189,7 +214,7 @@ export function UnitConverterForm({
             />
           </div>
 
-          <p className='text-xs text-muted-foreground'>
+          <p className='hidden sm:block text-xs text-muted-foreground'>
             Press <kbd className='px-2 py-1 bg-muted rounded text-xs'>Enter</kbd> to convert
           </p>
         </form>
