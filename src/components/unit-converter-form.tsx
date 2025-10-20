@@ -148,6 +148,7 @@ export function UnitConverterForm({
                   <FormControl>
                     <Input
                       type='text'
+                      inputMode='decimal'
                       placeholder='Enter value'
                       {...field}
                       ref={inputRef}
