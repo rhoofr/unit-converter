@@ -14,7 +14,7 @@ export default function Home() {
       <AppHeader />
 
       {/* Main Content */}
-      <main className='container mx-auto px-4 py-6 sm:px-6 lg:px-8 lg:py-8'>
+      <main className='container mx-auto px-4 py-4 sm:px-6 lg:px-8 lg:py-6'>
         {/* Welcome Section */}
         <section className='mb-4 lg:mb-6'>
           <h2 className='text-base sm:text-xl md:text-2xl font-semibold text-foreground mb-2'>Select a Category</h2>
