@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { useUnitPreferences } from '../use-unit-preferences';
+import { useUnitPreferences, DEFAULT_UNIT_PREFERENCES } from '../use-unit-preferences';
 
 // Mock localStorage
 const localStorageMock = {
@@ -15,18 +15,22 @@ Object.defineProperty(window, 'localStorage', {
   writable: true,
 });
 
-// Mock the default preferences to match your actual implementation
-const DEFAULT_UNIT_PREFERENCES = {
-  length: 'Kilometers',
-  volume: 'Liters',
-  weight: 'Ounces',
-  temperature: 'Celsius',
-  time: 'Unix Epoch (Seconds)',
-};
-
 describe('useUnitPreferences', () => {
+  // Store original console methods
+  const originalConsoleError = console.error;
+  const originalConsoleLog = console.log;
+
   beforeEach(() => {
+    // Clear all mocks before each test
     vi.clearAllMocks();
+    localStorageMock.getItem.mockClear();
+    localStorageMock.setItem.mockClear();
+  });
+
+  afterEach(() => {
+    // Restore console methods after each test
+    console.error = originalConsoleError;
+    console.log = originalConsoleLog;
   });
 
   it('loads default preferences when localStorage is empty', () => {
@@ -36,24 +40,54 @@ describe('useUnitPreferences', () => {
 
     expect(result.current.preferences).toEqual(DEFAULT_UNIT_PREFERENCES);
     expect(result.current.isLoaded).toBe(true);
+    expect(localStorageMock.getItem).toHaveBeenCalledWith('unit-converter-preferences');
   });
 
-  it('loads preferences from localStorage', () => {
-    const storedPrefs = { ...DEFAULT_UNIT_PREFERENCES, length: 'Miles' };
+  it('loads preferences from localStorage when valid JSON exists', () => {
+    const storedPrefs = {
+      ...DEFAULT_UNIT_PREFERENCES,
+      length: 'Miles',
+      volume: 'Gallons',
+    };
     localStorageMock.getItem.mockReturnValue(JSON.stringify(storedPrefs));
 
     const { result } = renderHook(() => useUnitPreferences());
 
     expect(result.current.preferences.length).toBe('Miles');
+    expect(result.current.preferences.volume).toBe('Gallons');
     expect(result.current.isLoaded).toBe(true);
   });
 
   it('handles invalid JSON in localStorage gracefully', () => {
+    // Mock console.error to prevent the error from appearing in test output
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
     localStorageMock.getItem.mockReturnValue('invalid-json');
 
     const { result } = renderHook(() => useUnitPreferences());
 
+    // Should fall back to default preferences
     expect(result.current.preferences).toEqual(DEFAULT_UNIT_PREFERENCES);
+    expect(result.current.isLoaded).toBe(true);
+
+    // Verify that the error was logged (but suppressed in test output)
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Failed to load unit preferences from localStorage:',
+      expect.any(SyntaxError)
+    );
+
+    // Restore console.error
+    consoleSpy.mockRestore();
+  });
+
+  it('handles malformed but parseable JSON gracefully', () => {
+    // Test with JSON that parses but doesn't match expected structure
+    localStorageMock.getItem.mockReturnValue('{"invalidStructure": true}');
+
+    const { result } = renderHook(() => useUnitPreferences());
+
+    // Should merge with defaults for missing properties
+    expect(result.current.preferences).toEqual(expect.objectContaining(DEFAULT_UNIT_PREFERENCES));
     expect(result.current.isLoaded).toBe(true);
   });
 
@@ -73,41 +107,58 @@ describe('useUnitPreferences', () => {
     );
   });
 
-  it('updates multiple preferences at once', () => {
-    localStorageMock.getItem.mockReturnValue(null);
+  it('partially updates preferences while preserving others', () => {
+    const initialPrefs = {
+      ...DEFAULT_UNIT_PREFERENCES,
+      length: 'Miles',
+      volume: 'Gallons',
+    };
+    localStorageMock.getItem.mockReturnValue(JSON.stringify(initialPrefs));
 
     const { result } = renderHook(() => useUnitPreferences());
 
     act(() => {
-      result.current.updatePreferences({
-        length: 'Miles',
-        weight: 'Pounds',
-        temperature: 'Fahrenheit',
-      });
+      result.current.updatePreferences({ length: 'Kilometers' });
     });
 
-    expect(result.current.preferences.length).toBe('Miles');
-    expect(result.current.preferences.weight).toBe('Pounds');
-    expect(result.current.preferences.temperature).toBe('Fahrenheit');
-    expect(result.current.preferences.volume).toBe('Liters'); // unchanged
+    expect(result.current.preferences.length).toBe('Kilometers');
+    expect(result.current.preferences.volume).toBe('Gallons'); // Preserved
+    expect(result.current.preferences.weight).toBe(DEFAULT_UNIT_PREFERENCES.weight); // Preserved
   });
 
-  it('preserves existing preferences when updating partial preferences', () => {
-    const storedPrefs = {
-      ...DEFAULT_UNIT_PREFERENCES,
-      length: 'Kilometers',
-      weight: 'Pounds',
-    };
-    localStorageMock.getItem.mockReturnValue(JSON.stringify(storedPrefs));
+  it('handles localStorage setItem errors gracefully', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    localStorageMock.getItem.mockReturnValue(null);
+    localStorageMock.setItem.mockImplementation(() => {
+      throw new Error('localStorage is full');
+    });
 
     const { result } = renderHook(() => useUnitPreferences());
 
     act(() => {
-      result.current.updatePreferences({ temperature: 'Fahrenheit' });
+      result.current.updatePreferences({ length: 'Kilometers' });
     });
 
-    expect(result.current.preferences.length).toBe('Kilometers'); // preserved
-    expect(result.current.preferences.weight).toBe('Pounds'); // preserved
-    expect(result.current.preferences.temperature).toBe('Fahrenheit'); // updated
+    // Preferences should still update in memory
+    expect(result.current.preferences.length).toBe('Kilometers');
+
+    // Error should be logged
+    expect(consoleSpy).toHaveBeenCalledWith('Failed to save unit preferences to localStorage:', expect.any(Error));
+
+    consoleSpy.mockRestore();
+  });
+
+  it('maintains referential stability of updatePreferences function', () => {
+    localStorageMock.getItem.mockReturnValue(null);
+
+    const { result, rerender } = renderHook(() => useUnitPreferences());
+
+    const firstUpdateFn = result.current.updatePreferences;
+
+    rerender();
+
+    const secondUpdateFn = result.current.updatePreferences;
+
+    expect(firstUpdateFn).toBe(secondUpdateFn);
   });
 });
