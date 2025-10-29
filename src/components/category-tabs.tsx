@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Ruler, Droplet, Weight, Thermometer, Clock } from 'lucide-react';
+import { Ruler, Droplet, Weight, Thermometer, Clock, Calendar } from 'lucide-react';
 import {
   Tabs,
   TabsContent,
@@ -15,13 +15,15 @@ import {
 } from '@/components/ui';
 import { UnitConverterForm } from '@/components/unit-converter-form';
 import { TimeConverterForm } from '@/components/time-converter-form';
+import { DateConverterForm } from '@/components/date-converter-form';
 import { TimeConverterResults } from '@/components/time-converter-results';
 import { convertLength, getUnitIdFromName as getLengthUnitId } from '@/lib/conversions/length';
 import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conversions/volume';
 import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conversions/weight';
 import { convertTemperature, getUnitIdFromName as getTemperatureUnitId } from '@/lib/conversions/temperature';
 import { useUnitPreferencesContext } from '@/contexts/unit-preferences-context';
-import type { CategoryId } from '@/hooks/use-unit-preferences';
+
+type CategoryId = 'length' | 'volume' | 'weight' | 'temperature' | 'time' | 'date';
 
 interface ConversionCategory {
   id: CategoryId;
@@ -77,6 +79,13 @@ const categories: ConversionCategory[] = [
     icon: Clock,
     units: ['Unix Epoch (Seconds)', 'Unix Epoch (Milliseconds)', 'Local Datetime', 'UTC Datetime'],
   },
+  {
+    id: 'date',
+    name: 'Date',
+    description: 'Calculate the difference in days between two dates',
+    icon: Calendar,
+    units: ['From Date', 'To Date'],
+  },
 ];
 
 export function CategoryTabs() {
@@ -87,7 +96,7 @@ export function CategoryTabs() {
   if (!isLoaded) {
     return (
       <div className='w-full'>
-        <div className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 h-auto p-0 bg-muted rounded-md'>
+        <div className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 h-auto p-0 bg-muted rounded-md'>
           {categories.map((category) => {
             const Icon = category.icon;
             return (
@@ -108,7 +117,7 @@ export function CategoryTabs() {
     <Tabs defaultValue='length' className='w-full' onValueChange={setActiveTab}>
       {/* Add wrapper with relative positioning and proper spacing */}
       <div className='space-y-4'>
-        <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 h-auto p-1 bg-muted'>
+        <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 h-auto p-1 bg-muted'>
           {categories.map((category) => {
             const Icon = category.icon;
             return (
@@ -185,6 +194,8 @@ export function CategoryTabs() {
                               isActive={activeTab === category.id}
                             />
                           </div>
+                        ) : category.id === 'date' ? (
+                          <DateConverterForm isActive={activeTab === category.id} />
                         ) : conversionProps ? (
                           <UnitConverterForm
                             defaultUnit={getDefaultUnit(category.id)}
