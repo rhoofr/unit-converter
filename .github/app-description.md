@@ -1,8 +1,8 @@
 # Unit Converter - Application Description
 
-**Last Updated:** October 18, 2025  
+**Last Updated:** October 29, 2025  
 **Maintainer:** @rhoofr  
-**Version:** 0.1.0
+**Version:** 0.2.0
 
 ## Overview
 
@@ -29,11 +29,12 @@ Unit Converter is a responsive web application built with Next.js 15, React 19, 
 - Results display:
   - Millimeter: `5000`
   - Centimeter: `500`
-  - Kilometer: `0.0050`
-  - Inch: `196.8504`
-  - Foot: `16.4042`
-  - Yard: `5.4681`
-  - Mile: `0.0031`
+  - Kilometer: `0.01`
+  - Inch: `196.85`
+  - Foot: `16.40`
+  - Yard: `5.47`
+  - Mile: `0.00`
+  - Steps (Walking): `6.79`
 
 ## Supported Categories and Units
 
@@ -49,6 +50,7 @@ Convert between metric and imperial distance measurements:
 - **Foot** (ft)
 - **Yard** (yd)
 - **Mile** (mi)
+- **Steps (Walking)** (step)
 
 ### 2. Volume
 
@@ -157,7 +159,7 @@ Each category has a **base unit** for internal calculations:
 4. **Error Handling**: Graceful handling of invalid inputs with helpful messages
 5. **Performance**: Fast, optimized calculations using React Server Components where possible
 
-## Future Enhancements (Not in v0.1.0)
+## Future Enhancements (Not in v0.2.0)
 
 - Currency conversion
 - Area and speed conversions
@@ -166,6 +168,7 @@ Each category has a **base unit** for internal calculations:
 - Shareable conversion links
 - Offline support via PWA
 - Batch conversions
+- Date calculator
 
 ## Development Stack
 
