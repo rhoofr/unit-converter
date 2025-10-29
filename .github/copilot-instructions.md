@@ -398,3 +398,26 @@ npm run lint         # Run ESLint checks
 - `tsconfig.json` - TypeScript paths (`@/*`) and strict mode settings
 - `eslint.config.mjs` - ESLint flat config with Next.js + TypeScript rules
 - `postcss.config.mjs` - PostCSS with Tailwind v4 plugin
+
+## Test Execution Instructions
+
+When providing commands to run tests, use the following format that allows automatic execution in the terminal:
+
+```bash
+cd npm test -- [test-file-name].test.js
+```
+
+**Important:** When you give the command to run a test (as shown in the format above), the user will click "Allow" in the VS Code prompt, which will automatically run the command in the terminal. You will be able to see the results directly without the user needing to:
+
+- Click enter in the terminal
+- Copy and paste the results back to you
+
+This streamlined workflow means you can immediately analyze test results and provide feedback or suggestions based on what you observe.
+
+**Example:**
+
+```bash
+cd npm test -- analyzeTrendCorrelations.test.js
+```
+
+When the user clicks "Allow", the test runs automatically and you can see the output to determine if tests pass or fail, and provide appropriate next steps.

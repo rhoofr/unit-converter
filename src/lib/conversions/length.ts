@@ -71,6 +71,13 @@ export const lengthUnits: Record<string, LengthUnit> = {
     toBase: (value: number) => value,
     fromBase: (value: number) => value,
   },
+  step: {
+    id: 'step',
+    name: 'Steps (Walking)',
+    symbol: 'steps',
+    toBase: (value: number) => value * 0.7366, // 29 inches = 0.7366 meters
+    fromBase: (value: number) => value / 0.7366,
+  },
 };
 
 /**

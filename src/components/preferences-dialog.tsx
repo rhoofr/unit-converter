@@ -37,7 +37,17 @@ const categories: CategoryConfig[] = [
     id: 'length',
     name: 'Length',
     icon: Ruler,
-    units: ['Kilometers', 'Miles', 'Millimeters', 'Centimeters', 'Meters', 'Inches', 'Feet', 'Yards'],
+    units: [
+      'Kilometers',
+      'Miles',
+      'Millimeters',
+      'Centimeters',
+      'Meters',
+      'Inches',
+      'Feet',
+      'Yards',
+      'Steps (Walking)',
+    ],
   },
   {
     id: 'volume',

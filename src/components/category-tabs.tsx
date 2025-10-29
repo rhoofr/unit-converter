@@ -37,7 +37,17 @@ const categories: ConversionCategory[] = [
     name: 'Length',
     description: 'Convert between metric and imperial distance measurements',
     icon: Ruler,
-    units: ['Kilometers', 'Miles', 'Millimeters', 'Centimeters', 'Meters', 'Inches', 'Feet', 'Yards'],
+    units: [
+      'Kilometers',
+      'Miles',
+      'Millimeters',
+      'Centimeters',
+      'Meters',
+      'Inches',
+      'Feet',
+      'Yards',
+      'Steps (Walking)',
+    ],
   },
   {
     id: 'volume',
