@@ -149,7 +149,7 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
         toDateInputRef.current?.focus();
       });
     } else if (mode === 'days') {
-      form.setValue('toDate', undefined); // Reset toDate input
+      form.setValue('toDate', today); // Reset toDate input to today instead of undefined
       requestAnimationFrame(() => {
         daysInputRef.current?.focus();
       });
@@ -210,13 +210,13 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
                 name='fromDate'
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>From</FormLabel>
+                    <FormLabel>From Date</FormLabel>
                     <div className='flex gap-2 items-center'>
                       <FormControl>
                         <DatePicker
                           selected={field.value}
                           onChange={(date) => field.onChange(date)}
-                          dateFormat='yyyy-MM-dd'
+                          dateFormat='MM/dd/yyyy'
                           placeholderText='Select date'
                           className={cn(
                             'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base sm:text-lg ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
@@ -249,13 +249,31 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>To Date</FormLabel>
-                      <FormControl>
-                        <DatePicker
+                      <div className='flex gap-2 items-center'>
+                        <FormControl>
+                          <DatePicker
+                            selected={
+                              field.value instanceof Date && !isNaN(field.value.getTime()) ? field.value : today
+                            }
+                            onChange={(date) => field.onChange(date)}
+                            dateFormat='MM/dd/yyyy'
+                            placeholderText='Select date'
+                            className={cn(
+                              'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base sm:text-lg ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2'
+                            )}
+                            todayButton='Today'
+                            showMonthDropdown
+                            showYearDropdown
+                            dropdownMode='select'
+                            customInput={<DatePickerInput ref={toDateInputRef} placeholder='Select a date' />}
+                          />
+                          {/* <DatePicker
                           selected={field.value}
                           onChange={(date) => field.onChange(date)}
                           customInput={<DatePickerInput ref={toDateInputRef} placeholder='Select a date' />}
-                        />
-                      </FormControl>
+                        /> */}
+                        </FormControl>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -266,7 +284,7 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
                   name='days'
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Days</FormLabel>
+                      <FormLabel>Number of Days</FormLabel>
                       <FormControl>
                         <input
                           type='number'
@@ -300,8 +318,8 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
           )}
           {mode === 'days' && result.endDate && typeof result.daysDiff === 'number' && (
             <div className='text-lg sm:text-xl font-semibold text-center'>
-              {`${formatDate(result.endDate)}`}
-              <span className='block text-sm text-muted-foreground mt-1'>
+              {`${formatDate(result.endDate)}   `}
+              <span className='text-sm text-muted-foreground mt-1'>
                 {result.daysDiff === 0
                   ? 'Same day'
                   : `${result.daysDiff > 0 ? '+' : ''}${result.daysDiff} day${
