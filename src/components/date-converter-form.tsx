@@ -86,6 +86,7 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
     endDate: null,
   });
   const fromDateButtonRef = React.useRef<HTMLButtonElement>(null);
+  const toDateButtonRef = React.useRef<HTMLButtonElement>(null);
   const toDateInputRef = React.useRef<HTMLInputElement>(null);
   const daysInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -130,6 +131,7 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
 
   // Quick set to today
   const setFromToday = () => form.setValue('fromDate', today);
+  const setToToday = () => form.setValue('toDate', today);
 
   // Format date as yyyy-MM-dd
   const formatDate = (date: Date) =>
@@ -267,12 +269,10 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
                             dropdownMode='select'
                             customInput={<DatePickerInput ref={toDateInputRef} placeholder='Select a date' />}
                           />
-                          {/* <DatePicker
-                          selected={field.value}
-                          onChange={(date) => field.onChange(date)}
-                          customInput={<DatePickerInput ref={toDateInputRef} placeholder='Select a date' />}
-                        /> */}
                         </FormControl>
+                        <Button type='button' variant='secondary' size='sm' onClick={setToToday} ref={toDateButtonRef}>
+                          Today
+                        </Button>
                       </div>
                       <FormMessage />
                     </FormItem>
