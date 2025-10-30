@@ -108,7 +108,9 @@ export function PreferencesDialog({ open, onOpenChange }: PreferencesDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className='sm:max-w-[550px]'>
+      <DialogContent
+        className='sm:max-w-[550px] max-h-screen overflow-y-auto px-4 py-6 sm:px-8 sm:py-8'
+        style={{ maxHeight: '100dvh' }}>
         <DialogHeader>
           <DialogTitle className='text-xl sm:text-2xl'>Unit Preferences</DialogTitle>
           <DialogDescription className='text-sm sm:text-base'>Choose your preferred default units.</DialogDescription>
