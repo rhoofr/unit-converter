@@ -29,6 +29,7 @@ interface ConversionCategory {
   id: CategoryId;
   name: string;
   description: string;
+  action: string;
   icon: React.ComponentType<{ className?: string }>;
   units: string[];
 }
@@ -38,7 +39,9 @@ const categories: ConversionCategory[] = [
     id: 'length',
     name: 'Length',
     description: 'Convert between metric and imperial distance measurements',
+    action: 'Converter',
     icon: Ruler,
+
     units: [
       'Kilometers',
       'Miles',
@@ -55,6 +58,7 @@ const categories: ConversionCategory[] = [
     id: 'volume',
     name: 'Volume',
     description: 'Convert between metric and US liquid measurements',
+    action: 'Converter',
     icon: Droplet,
     units: ['Milliliters', 'Liters', 'Fluid Ounces', 'Cups', 'Pints', 'Quarts', 'Gallons'],
   },
@@ -62,6 +66,7 @@ const categories: ConversionCategory[] = [
     id: 'weight',
     name: 'Weight',
     description: 'Convert between metric and imperial mass measurements',
+    action: 'Converter',
     icon: Weight,
     units: ['Grams', 'Kilograms', 'Metric Tons', 'Ounces', 'Pounds', 'US Tons', 'Stone'],
   },
@@ -69,6 +74,7 @@ const categories: ConversionCategory[] = [
     id: 'temperature',
     name: 'Temperature',
     description: 'Convert between common temperature scales',
+    action: 'Converter',
     icon: Thermometer,
     units: ['Celsius', 'Fahrenheit', 'Kelvin'],
   },
@@ -76,6 +82,7 @@ const categories: ConversionCategory[] = [
     id: 'time',
     name: 'Time',
     description: 'Convert between Unix epoch and datetime formats',
+    action: 'Converter',
     icon: Clock,
     units: ['Unix Epoch (Seconds)', 'Unix Epoch (Milliseconds)', 'Local Datetime', 'UTC Datetime'],
   },
@@ -83,6 +90,7 @@ const categories: ConversionCategory[] = [
     id: 'date',
     name: 'Date',
     description: 'Calculate the difference in days between two dates',
+    action: 'Calculator',
     icon: Calendar,
     units: ['From Date', 'To Date'],
   },
@@ -174,7 +182,9 @@ export function CategoryTabs() {
                         <Icon className='h-5 w-5 sm:h-6 sm:w-6 text-primary' />
                       </div>
                       <div>
-                        <CardTitle className='text-lg sm:text-xl lg:text-2xl'>{category.name} Converter</CardTitle>
+                        <CardTitle className='text-lg sm:text-xl lg:text-2xl'>
+                          {category.name} {category.action}
+                        </CardTitle>
                         <CardDescription className='text-xs sm:text-sm mt-0.5 sm:mt-1'>
                           {category.description}
                         </CardDescription>
