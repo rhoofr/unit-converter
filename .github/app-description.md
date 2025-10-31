@@ -12,7 +12,7 @@ Unit Converter is a responsive web application built with Next.js 15, React 19, 
 
 ### Conversion & Calculation Flow
 
-1. User selects a **category** (Length, Volume, Weight, Temperature, Time, or Date)
+1. User selects a **category** (Length, Volume, Weight, Temperature, Time, Date, or Numbers)
 2. For conversion categories:
    - User selects a **source unit** from the available units in that category
    - User enters a **numeric value** to convert
@@ -107,6 +107,33 @@ Convert between Unix epoch timestamps and human-readable datetime formats:
 
 ### 6. Date Calculator
 
+### 7. Numbers
+
+Perform number comparisons and percentage calculations:
+
+- **Compare Two Numbers**: Enter two numbers to see the difference and percentage difference
+- **Number Up/Down by %**: Enter a number and a percentage to calculate the result up or down by that percentage
+
+#### Example Usage
+
+**Compare Two Numbers:**
+
+- User enters: `200` as the first number, `205` as the second number
+- Results display:
+  - Difference: `5`
+  - % Difference: `2.50%`
+- User enters: `205` as the first number, `200` as the second number
+- Results display:
+  - Difference: `-5`
+  - % Difference: `-2.44%`
+
+**Number Up/Down by %:**
+
+- User enters: `200` as the number, `3` as the percentage
+- Result: `206`
+- User enters: `200` as the number, `-4` as the percentage
+- Result: `192`
+
 Calculate the difference in days between two dates, or add/subtract days to a date:
 
 - **From Date** - Start date for calculation
@@ -156,7 +183,7 @@ interface ConversionResult {
 
 ### Conversion & Calculation Logic
 
-Each category has a **base unit** for internal calculations:
+Each category has a **base unit** for internal calculations (where applicable):
 
 - **Length**: Meter (m)
 - **Volume**: Liter (L)
@@ -164,6 +191,11 @@ Each category has a **base unit** for internal calculations:
 - **Temperature**: Uses direct formulas (no base unit)
 - **Time**: Unix Epoch Seconds
 - **Date**: Uses JavaScript `Date` objects for calculations
+
+**Numbers Calculation Process:**
+
+- **Compare Two Numbers**: Calculates the difference (`second - first`) and percentage difference (`(second - first) / first * 100`). Results are formatted to 2 decimal places.
+- **Number Up/Down by %**: Calculates the result as `number * (1 + percent / 100)`. Result is formatted to 2 decimal places.
 
 **Conversion Process:**
 

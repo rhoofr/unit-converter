@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Ruler, Droplet, Weight, Thermometer, Clock, Calendar } from 'lucide-react';
+import { Ruler, Droplet, Weight, Thermometer, Clock, Calendar, Calculator } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -48,6 +48,12 @@ const categories: CategoryConfig[] = [
       'Yards',
       'Steps (Walking)',
     ],
+  },
+  {
+    id: 'numbers',
+    name: 'Numbers',
+    icon: Calculator,
+    units: ['Compare two numbers', 'Number up/down by %'],
   },
   {
     id: 'volume',

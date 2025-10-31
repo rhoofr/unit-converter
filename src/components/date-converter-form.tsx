@@ -192,24 +192,16 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
                     <FormLabel className='sr-only'>Mode</FormLabel>
                     <Button
                       type='button'
-                      variant={field.value === 'date' ? 'default' : 'secondary'}
-                      size='sm'
-                      className={cn(
-                        'flex-1 flex gap-2 items-center rounded-full',
-                        field.value === 'date' && 'ring-2 ring-primary'
-                      )}
+                      variant={field.value === 'date' ? 'default' : 'outline'}
+                      className={cn('flex-1 flex gap-2 items-center', field.value === 'date' && 'ring-2 ring-primary')}
                       onClick={() => field.onChange('date')}
                       aria-pressed={field.value === 'date'}>
                       <CalendarDays className='h-4 w-4' /> Pick end date
                     </Button>
                     <Button
                       type='button'
-                      variant={field.value === 'days' ? 'default' : 'secondary'}
-                      size='sm'
-                      className={cn(
-                        'flex-1 flex gap-2 items-center rounded-full',
-                        field.value === 'days' && 'ring-2 ring-primary'
-                      )}
+                      variant={field.value === 'days' ? 'default' : 'outline'}
+                      className={cn('flex-1 flex gap-2 items-center', field.value === 'days' && 'ring-2 ring-primary')}
                       onClick={() => field.onChange('days')}
                       aria-pressed={field.value === 'days'}>
                       <PlusCircle className='h-4 w-4' /> Add days

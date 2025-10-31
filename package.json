@@ -13,7 +13,7 @@
     "test:single:verbose": "vitest run tabs.test.tsx --reporter=verbose",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "predeploy": "npm run build && touch out/.nojekyll",
+    "predeploy": "npm run clean && npm run build && touch out/.nojekyll",
     "deploy": "gh-pages -d out -t",
     "clean": "rimraf .next out node_modules/.cache",
     "dev:clean": "npm run clean && npm run dev"

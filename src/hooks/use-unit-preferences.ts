@@ -14,10 +14,13 @@ export const DEFAULT_UNIT_PREFERENCES = {
   temperature: 'Celsius',
   time: 'Unix Epoch (Seconds)',
   date: 'Pick end date', // Add date category with default
+  numbers: 'Compare two numbers' as NumbersPreference,
 } as const;
 
+export type NumbersPreference = 'Compare two numbers' | 'Number up/down by %';
+
 export type CategoryId = keyof typeof DEFAULT_UNIT_PREFERENCES;
-export type UnitPreferences = typeof DEFAULT_UNIT_PREFERENCES;
+export type UnitPreferences = Omit<typeof DEFAULT_UNIT_PREFERENCES, 'numbers'> & { numbers: NumbersPreference };
 
 const STORAGE_KEY = 'unit-converter-preferences';
 

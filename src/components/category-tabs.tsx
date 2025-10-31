@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Ruler, Droplet, Weight, Thermometer, Clock, Calendar } from 'lucide-react';
+import { Ruler, Droplet, Weight, Thermometer, Clock, Calendar, Calculator } from 'lucide-react';
 import {
   Tabs,
   TabsContent,
@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from '@/components/ui';
 import { UnitConverterForm } from '@/components/unit-converter-form';
+import { NumbersConverterForm } from '@/components/numbers-converter-form';
 import { TimeConverterForm } from '@/components/time-converter-form';
 import { DateConverterForm } from '@/components/date-converter-form';
 import { TimeConverterResults } from '@/components/time-converter-results';
@@ -23,7 +24,7 @@ import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conve
 import { convertTemperature, getUnitIdFromName as getTemperatureUnitId } from '@/lib/conversions/temperature';
 import { useUnitPreferencesContext } from '@/contexts/unit-preferences-context';
 
-type CategoryId = 'length' | 'volume' | 'weight' | 'temperature' | 'time' | 'date';
+type CategoryId = 'length' | 'volume' | 'weight' | 'temperature' | 'time' | 'date' | 'numbers';
 
 interface ConversionCategory {
   id: CategoryId;
@@ -53,6 +54,14 @@ const categories: ConversionCategory[] = [
       'Yards',
       'Steps (Walking)',
     ],
+  },
+  {
+    id: 'numbers',
+    name: 'Numbers',
+    description: 'Compare numbers or calculate up/down by %',
+    action: 'Calculator',
+    icon: Calculator,
+    units: ['Compare', 'Up/Down by %'],
   },
   {
     id: 'volume',
@@ -125,7 +134,7 @@ export function CategoryTabs() {
     <Tabs defaultValue='length' className='w-full' onValueChange={setActiveTab}>
       {/* Add wrapper with relative positioning and proper spacing */}
       <div className='space-y-4'>
-        <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 h-auto p-1 bg-muted'>
+        <TabsList className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 h-auto p-1 bg-muted'>
           {categories.map((category) => {
             const Icon = category.icon;
             return (
@@ -166,6 +175,7 @@ export function CategoryTabs() {
                     convertFunction: convertTemperature,
                     getUnitIdFunction: getTemperatureUnitId,
                   };
+                // No conversionProps for numbers
                 default:
                   return null;
               }
@@ -206,6 +216,8 @@ export function CategoryTabs() {
                           </div>
                         ) : category.id === 'date' ? (
                           <DateConverterForm isActive={activeTab === category.id} />
+                        ) : category.id === 'numbers' ? (
+                          <NumbersConverterForm isActive={activeTab === category.id} />
                         ) : conversionProps ? (
                           <UnitConverterForm
                             defaultUnit={getDefaultUnit(category.id)}
