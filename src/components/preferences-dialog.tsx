@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Ruler, Droplet, Weight, Thermometer, Clock } from 'lucide-react';
+import { Ruler, Droplet, Weight, Thermometer, Clock, Calendar } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -72,6 +72,12 @@ const categories: CategoryConfig[] = [
     name: 'Time',
     icon: Clock,
     units: ['Unix Epoch (Seconds)', 'Unix Epoch (Milliseconds)', 'Local Datetime', 'UTC Datetime'],
+  },
+  {
+    id: 'date',
+    name: 'Date',
+    icon: Calendar,
+    units: ['Pick end date', 'Add days'],
   },
 ];
 

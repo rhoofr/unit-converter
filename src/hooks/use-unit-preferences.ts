@@ -6,12 +6,14 @@ import { useState, useEffect, useCallback } from 'react';
  * Default unit preferences for each conversion category
  * These are used as fallback values when no user preference is stored
  */
+
 export const DEFAULT_UNIT_PREFERENCES = {
   length: 'Kilometers',
   volume: 'Liters',
   weight: 'Ounces',
   temperature: 'Celsius',
   time: 'Unix Epoch (Seconds)',
+  date: 'Pick end date', // Add date category with default
 } as const;
 
 export type CategoryId = keyof typeof DEFAULT_UNIT_PREFERENCES;

@@ -1,5 +1,7 @@
 'use client';
 
+import { useUnitPreferencesContext } from '@/contexts/unit-preferences-context';
+
 import * as React from 'react';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
@@ -60,17 +62,27 @@ const DatePickerInput = React.forwardRef<HTMLInputElement, DatePickerInputProps>
 );
 DatePickerInput.displayName = 'DatePickerInput';
 
+// Get user preferences context
+
 export function DateConverterForm({ isActive }: DateConverterFormProps) {
+  const { getDefaultUnit } = useUnitPreferencesContext();
+
   const today = React.useMemo(() => {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     return now;
   }, []);
 
+  // Get user preference for date mode
+  const preferredDateMode = React.useMemo(() => {
+    const pref = getDefaultUnit ? getDefaultUnit('date') : 'Pick end date';
+    return pref === 'Add days' ? 'days' : 'date';
+  }, [getDefaultUnit]);
+
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      mode: 'date',
+      mode: preferredDateMode,
       fromDate: today,
       toDate: today,
       days: '',
@@ -120,14 +132,15 @@ export function DateConverterForm({ isActive }: DateConverterFormProps) {
     }
   }, [mode, fromDate, toDate, days]);
 
-  // Focus "From" date button when tab becomes active
+  // When tab becomes active, set mode to user preference and focus
   React.useEffect(() => {
     if (isActive) {
+      form.setValue('mode', preferredDateMode);
       requestAnimationFrame(() => {
         fromDateButtonRef.current?.focus();
       });
     }
-  }, [isActive]);
+  }, [isActive, preferredDateMode, form]);
 
   // Quick set to today
   const setFromToday = () => form.setValue('fromDate', today);
