@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Unit Converter',
-  description: 'Convert between different units of measurement - length, volume, weight, temperature, and time',
+  description: 'Convert between different units of measurement - length, volume, weight, temperature, time and date',
   keywords: [
     'unit converter',
     'measurement converter',
@@ -24,6 +24,8 @@ export const metadata: Metadata = {
     'volume converter',
     'weight converter',
     'temperature converter',
+    'time converter',
+    'date calculator',
   ],
 };
 

@@ -1,8 +1,8 @@
 # Unit Converter - Application Description
 
-**Last Updated:** October 29, 2025  
+**Last Updated:** October 31, 2025  
 **Maintainer:** @rhoofr  
-**Version:** 0.2.0
+**Version:** 0.3.0
 
 ## Overview
 
@@ -10,13 +10,17 @@ Unit Converter is a responsive web application built with Next.js 15, React 19, 
 
 ## Core Functionality
 
-### Conversion Flow
+### Conversion & Calculation Flow
 
-1. User selects a **category** (Length, Volume, Weight, Temperature, or Time)
-2. User selects a **source unit** from the available units in that category
-3. User enters a **numeric value** to convert
-4. Application displays **all conversions** to other units in the same category
-5. All decimal results are displayed to **2 decimal places** for precision
+1. User selects a **category** (Length, Volume, Weight, Temperature, Time, or Date)
+2. For conversion categories:
+   - User selects a **source unit** from the available units in that category
+   - User enters a **numeric value** to convert
+   - Application displays **all conversions** to other units in the same category
+3. For the **Date Calculator**:
+   - User can either calculate the number of days between two dates, or add/subtract days to/from a specific date
+   - Application displays the result instantly
+4. All decimal results are displayed to **2 decimal places** for precision
 
 ### Example Usage
 
@@ -35,6 +39,14 @@ Unit Converter is a responsive web application built with Next.js 15, React 19, 
   - Yard: `5.47`
   - Mile: `0.00`
   - Steps (Walking): `6.79`
+
+**Date Calculator:**
+
+- User selects: **Date** category
+- User chooses between:
+  - **Pick end date**: Selects a start and end date to see the number of days between them
+  - **Add days**: Enters a start date and a number of days to calculate the resulting date
+- Results display instantly, showing either the days difference or the calculated date
 
 ## Supported Categories and Units
 
@@ -93,6 +105,14 @@ Convert between Unix epoch timestamps and human-readable datetime formats:
 - **Local Datetime** - User's local timezone
 - **UTC Datetime** - Coordinated Universal Time
 
+### 6. Date Calculator
+
+Calculate the difference in days between two dates, or add/subtract days to a date:
+
+- **From Date** - Start date for calculation
+- **To Date** - End date for difference calculation
+- **Number of Days** - Days to add/subtract from a date
+
 ## Technical Specifications
 
 ### User Interface
@@ -134,7 +154,7 @@ interface ConversionResult {
 }
 ```
 
-### Conversion Logic
+### Conversion & Calculation Logic
 
 Each category has a **base unit** for internal calculations:
 
@@ -143,6 +163,7 @@ Each category has a **base unit** for internal calculations:
 - **Weight**: Kilogram (kg)
 - **Temperature**: Uses direct formulas (no base unit)
 - **Time**: Unix Epoch Seconds
+- **Date**: Uses JavaScript `Date` objects for calculations
 
 **Conversion Process:**
 
@@ -150,6 +171,11 @@ Each category has a **base unit** for internal calculations:
 2. Convert base unit to all target units using `fromBase()`
 3. Format results to 2 decimal places if decimal is not zero
 4. Display in responsive grid layout
+
+**Date Calculation Process:**
+
+- **Days Between Dates**: Calculates the difference in days between two selected dates
+- **Add/Subtract Days**: Adds or subtracts a specified number of days to/from a selected date and displays the resulting date
 
 ## User Experience Goals
 
@@ -159,16 +185,12 @@ Each category has a **base unit** for internal calculations:
 4. **Error Handling**: Graceful handling of invalid inputs with helpful messages
 5. **Performance**: Fast, optimized calculations using React Server Components where possible
 
-## Future Enhancements (Not in v0.2.0)
+## Future Enhancements (Not in v0.3.0)
 
 - Currency conversion
 - Area and speed conversions
 - Conversion history
 - Favorite conversions
-- Shareable conversion links
-- Offline support via PWA
-- Batch conversions
-- Date calculator
 
 ## Development Stack
 
