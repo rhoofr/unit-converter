@@ -347,10 +347,10 @@ export function TimeConverterForm({ defaultUnit, isActive }: TimeConverterFormPr
   DatePickerInput.displayName = 'DatePickerInput';
 
   return (
-    <div className='space-y-6'>
+    <div className='space-y-4'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleConvert)} className='space-y-4'>
-          <div className='grid grid-cols-1 gap-4'>
+          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             {/* Unit Select */}
             <FormField
               control={form.control}
@@ -432,16 +432,26 @@ export function TimeConverterForm({ defaultUnit, isActive }: TimeConverterFormPr
       {hasConverted && results && (
         <div className='border-t border-border pt-6'>
           <h3 className='text-lg font-semibold text-foreground mb-4'>Conversion Results</h3>
-          <Card>
-            <CardContent className='p-4'>
-              <div className='space-y-3'>
-                <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+          <Card className='py-2'>
+            <CardContent className='px-2'>
+              <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+                <div
+                  className={cn(
+                    'flex flex-col sm:flex-row sm:items-center gap-2',
+                    'transition-colors',
+                    'lg:border lg:border-border lg:rounded-md lg:bg-card/50 lg:p-2'
+                  )}>
                   <span className='text-xs sm:text-sm font-medium text-muted-foreground min-w-[200px]'>
                     Unix Epoch (Seconds)
                   </span>
                   <span className='font-mono text-xs sm:text-sm text-foreground break-all'>{results.unixSeconds}</span>
                 </div>
-                <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+                <div
+                  className={cn(
+                    'flex flex-col sm:flex-row sm:items-center gap-2',
+                    'transition-colors',
+                    'lg:border lg:border-border lg:rounded-md lg:bg-card/50 lg:p-2'
+                  )}>
                   <span className='text-xs sm:text-sm font-medium text-muted-foreground min-w-[200px]'>
                     Unix Epoch (Milliseconds)
                   </span>
@@ -449,7 +459,12 @@ export function TimeConverterForm({ defaultUnit, isActive }: TimeConverterFormPr
                     {results.unixMilliseconds}
                   </span>
                 </div>
-                <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+                <div
+                  className={cn(
+                    'flex flex-col sm:flex-row sm:items-center gap-2',
+                    'transition-colors',
+                    'lg:border lg:border-border lg:rounded-md lg:bg-card/50 lg:p-2'
+                  )}>
                   <span className='text-xs sm:text-sm font-medium text-muted-foreground min-w-[200px]'>
                     Local Datetime
                   </span>
@@ -457,7 +472,12 @@ export function TimeConverterForm({ defaultUnit, isActive }: TimeConverterFormPr
                     {formatLocalDatetimeDisplay(results.localDatetime, results.timezone, results.isDST)}
                   </span>
                 </div>
-                <div className='flex flex-col sm:flex-row sm:items-center gap-2'>
+                <div
+                  className={cn(
+                    'flex flex-col sm:flex-row sm:items-center gap-2',
+                    'transition-colors',
+                    'lg:border lg:border-border lg:rounded-md lg:bg-card/50 lg:p-2'
+                  )}>
                   <span className='text-xs sm:text-sm font-medium text-muted-foreground min-w-[200px]'>
                     UTC Datetime
                   </span>

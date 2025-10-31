@@ -5,6 +5,7 @@ import { RefreshCw, Clock } from 'lucide-react';
 import { Button, Card, CardContent } from '@/components/ui';
 import { getCurrentTime, formatLocalDatetimeDisplay, formatUTCDatetimeDisplay } from '@/lib/conversions/time';
 import type { TimeConversionResult } from '@/lib/conversions/time';
+import { cn } from '@/lib/utils';
 
 export function TimeConverterResults() {
   const [timeData, setTimeData] = React.useState<TimeConversionResult | null>(null);
@@ -73,11 +74,18 @@ export function TimeConverterResults() {
       </div>
 
       {/* Time Display Card */}
-      <Card>
-        <CardContent className='p-4'>
-          <div className='space-y-3'>
+      <Card className='py-2'>
+        <CardContent className='px-2'>
+          <div className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
             {timeUnits.map((unit) => (
-              <div key={unit.id} className='flex flex-col sm:flex-row sm:items-center gap-2'>
+              <div
+                key={unit.id}
+                className={cn(
+                  'flex flex-col sm:flex-row sm:items-center gap-2',
+                  'transition-colors',
+                  'lg:border lg:border-border lg:rounded-md lg:bg-card/50 lg:p-2'
+                )}
+                aria-label={unit.name}>
                 <span className='text-xs sm:text-sm font-medium text-muted-foreground min-w-[200px]'>{unit.name}</span>
                 <span className='font-mono text-xs sm:text-sm text-foreground break-all'>{unit.displayValue}</span>
               </div>

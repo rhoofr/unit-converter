@@ -175,7 +175,7 @@ export function CategoryTabs() {
 
             return (
               <TabsContent key={category.id} value={category.id} className='mt-0'>
-                <Card>
+                <Card className='py-4'>
                   <CardHeader>
                     <div className='flex items-center gap-2 sm:gap-3'>
                       <div className='p-1.5 sm:p-2 rounded-lg bg-primary/10'>
@@ -197,12 +197,12 @@ export function CategoryTabs() {
                       <div className='pt-4 border-t border-border'>
                         {category.id === 'time' ? (
                           <div className='space-y-6'>
-                            <TimeConverterResults />
-                            <div className='border-t border-border' />
                             <TimeConverterForm
                               defaultUnit={getDefaultUnit(category.id)}
                               isActive={activeTab === category.id}
                             />
+                            <div className='border-t border-border' />
+                            <TimeConverterResults />
                           </div>
                         ) : category.id === 'date' ? (
                           <DateConverterForm isActive={activeTab === category.id} />

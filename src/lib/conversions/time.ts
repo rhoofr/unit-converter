@@ -176,7 +176,7 @@ export function formatUnixMilliseconds(milliseconds: number): string {
 
 /**
  * Format local datetime for display
- * Returns format: "MMM DD, YYYY at HH:MM:SS AM/PM TZ"
+ * Returns format: "MMM DD, YYYY, HH:MM:SS TZ (DST/STD)"
  */
 export function formatLocalDatetimeDisplay(datetime: string, timezone: string, isDST: boolean): string {
   const date = new Date(datetime);
@@ -185,12 +185,13 @@ export function formatLocalDatetimeDisplay(datetime: string, timezone: string, i
     year: 'numeric',
     month: 'short',
     day: 'numeric',
-    hour: 'numeric',
+    hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: true,
+    hour12: false, // Use 24-hour format
   };
 
+  // Example output: "Oct 30, 2025, 21:53:31"
   const formatted = new Intl.DateTimeFormat('en-US', options).format(date);
   const dstIndicator = isDST ? ' (DST)' : ' (STD)';
 

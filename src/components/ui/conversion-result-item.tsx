@@ -28,7 +28,7 @@ export function ConversionResultItem({ unitName, symbol, value, className }: Con
   return (
     <div
       className={cn(
-        'bg-card border border-border rounded-lg p-4',
+        'bg-card border border-border rounded-lg p-3',
         'hover:border-primary/50 transition-colors',
         className
       )}>
