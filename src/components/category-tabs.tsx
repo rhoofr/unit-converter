@@ -113,7 +113,7 @@ export function CategoryTabs() {
   // Don't render forms until preferences are loaded to prevent hydration mismatch
   if (!isLoaded) {
     return (
-      <div className='w-full'>
+      <div className='w-full space-y-4'>
         <div className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 h-auto p-2 bg-muted rounded-md'>
           {categories.map((category) => (
             <div
@@ -123,6 +123,22 @@ export function CategoryTabs() {
               <Skeleton className='h-4 w-16 sm:w-20 lg:w-24 rounded' />
             </div>
           ))}
+        </div>
+
+        {/* Skeleton for Card */}
+        <div className='py-4 rounded-lg border bg-card'>
+          <div className='flex items-center gap-2 sm:gap-3 p-4'>
+            <Skeleton className='h-5 w-5 sm:h-6 sm:w-6 rounded-lg' />
+            <div className='space-y-2'>
+              <Skeleton className='h-4 w-32 sm:w-40 lg:w-48 rounded' />
+              <Skeleton className='h-3 w-24 sm:w-32 lg:w-40 rounded' />
+            </div>
+          </div>
+          <div className='p-4 space-y-4'>
+            <Skeleton className='h-4 w-full rounded' />
+            <Skeleton className='h-4 w-full rounded' />
+            <Skeleton className='h-4 w-full rounded' />
+          </div>
         </div>
       </div>
     );
