@@ -23,6 +23,7 @@ import { convertVolume, getUnitIdFromName as getVolumeUnitId } from '@/lib/conve
 import { convertWeight, getUnitIdFromName as getWeightUnitId } from '@/lib/conversions/weight';
 import { convertTemperature, getUnitIdFromName as getTemperatureUnitId } from '@/lib/conversions/temperature';
 import { useUnitPreferencesContext } from '@/contexts/unit-preferences-context';
+import { Skeleton } from '@/components/ui/skeleton';
 
 type CategoryId = 'length' | 'volume' | 'weight' | 'temperature' | 'time' | 'date' | 'numbers';
 
@@ -113,18 +114,15 @@ export function CategoryTabs() {
   if (!isLoaded) {
     return (
       <div className='w-full'>
-        <div className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 h-auto p-0 bg-muted rounded-md'>
-          {categories.map((category) => {
-            const Icon = category.icon;
-            return (
-              <div
-                key={category.id}
-                className='text-sm sm:text-base flex items-center justify-center gap-2 px-3 py-2 rounded-sm bg-background/50'>
-                <Icon className='h-4 w-4' />
-                <span>{category.name}</span>
-              </div>
-            );
-          })}
+        <div className='grid w-full grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 h-auto p-2 bg-muted rounded-md'>
+          {categories.map((category) => (
+            <div
+              key={category.id}
+              className='flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-2 rounded-md border text-xs sm:text-sm lg:text-base transition-colors select-none pointer-events-none'>
+              <Skeleton className='h-3.5 w-3.5 sm:h-4 sm:w-4 rounded' />
+              <Skeleton className='h-4 w-16 sm:w-20 lg:w-24 rounded' />
+            </div>
+          ))}
         </div>
       </div>
     );
