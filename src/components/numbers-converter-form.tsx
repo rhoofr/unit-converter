@@ -250,7 +250,7 @@ export function NumbersConverterForm({ isActive }: NumbersConverterFormProps) {
         )}
         {option === 'percent' && percentResult !== null && (
           <div className='mt-6 bg-muted/50 rounded-lg p-4'>
-            <span className='font-medium'>Result:</span> {percentResult.toFixed(2)}
+            <span className='font-medium'>Result:</span> {percentResult.toFixed(5)}
           </div>
         )}
       </CardContent>

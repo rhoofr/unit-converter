@@ -134,8 +134,8 @@ export function CategoryTabs() {
               <Skeleton className='h-3 w-24 sm:w-32 lg:w-40 rounded' />
             </div>
           </div>
-          <div className='p-4 space-y-4'>
-            <Skeleton className='h-4 w-full rounded' />
+          <div className='mt-3 pt-4 mx-6 border-t border-border'></div>
+          <div className='pt-4 px-4 space-y-4'>
             <Skeleton className='h-4 w-full rounded' />
             <Skeleton className='h-4 w-full rounded' />
           </div>
