@@ -50,10 +50,16 @@ const categories: CategoryConfig[] = [
     ],
   },
   {
-    id: 'numbers',
-    name: 'Numbers',
-    icon: Calculator,
-    units: ['Compare two numbers', 'Number up/down by %'],
+    id: 'temperature',
+    name: 'Temperature',
+    icon: Thermometer,
+    units: ['Celsius', 'Fahrenheit', 'Kelvin'],
+  },
+  {
+    id: 'time',
+    name: 'Time',
+    icon: Clock,
+    units: ['Unix Epoch (Seconds)', 'Unix Epoch (Milliseconds)', 'Local Datetime', 'UTC Datetime'],
   },
   {
     id: 'volume',
@@ -68,16 +74,10 @@ const categories: CategoryConfig[] = [
     units: ['Grams', 'Kilograms', 'Metric Tons', 'Ounces', 'Pounds', 'US Tons', 'Stone'],
   },
   {
-    id: 'temperature',
-    name: 'Temperature',
-    icon: Thermometer,
-    units: ['Celsius', 'Fahrenheit', 'Kelvin'],
-  },
-  {
-    id: 'time',
-    name: 'Time',
-    icon: Clock,
-    units: ['Unix Epoch (Seconds)', 'Unix Epoch (Milliseconds)', 'Local Datetime', 'UTC Datetime'],
+    id: 'numbers',
+    name: 'Numbers',
+    icon: Calculator,
+    units: ['Compare two numbers', 'Number up/down by %'],
   },
   {
     id: 'date',

@@ -198,7 +198,7 @@ export function NumbersConverterForm({ isActive }: NumbersConverterFormProps) {
         {option === 'compare' && compareResult && (
           <div className='mt-6 bg-muted/50 rounded-lg p-4 flex flex-col gap-2'>
             <div>
-              <span className='font-medium'>Difference:</span> {compareResult.diff.toFixed(2)}
+              <span className='font-medium'>Difference:</span> {compareResult.diff.toFixed(5)}
             </div>
             <div>
               <span className='font-medium'>% Difference:</span> {compareResult.percent.toFixed(2)}%
