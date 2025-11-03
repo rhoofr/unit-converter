@@ -397,6 +397,9 @@ export function TimeConverterForm({ defaultUnit, isActive }: TimeConverterFormPr
                         customInput={<DatePickerInput />}
                         showPopperArrow={false}
                         timeCaption='Time'
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode='select'
                       />
                     ) : (
                       <Input
