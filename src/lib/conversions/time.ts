@@ -212,7 +212,7 @@ export function formatUTCDatetimeDisplay(datetime: string): string {
     hour: 'numeric',
     minute: '2-digit',
     second: '2-digit',
-    hour12: true,
+    hour12: false,
     timeZone: 'UTC',
   };
 
